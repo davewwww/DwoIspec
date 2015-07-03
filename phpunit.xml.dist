@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="Dwo Ispec Test Suite">
+            <directory>src/Dwo/Ispec/Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src/Dwo/Ispec</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>
