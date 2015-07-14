@@ -15,6 +15,13 @@ interface IpInfoFindAllManagerInterface
     public function findAll();
 
     /**
+     * @param string $ip
+     *
+     * @return IpInfo[]
+     */
+    public function findAllByIp($ip);
+
+    /**
      * @param string $key
      *
      * @return IpInfo[]

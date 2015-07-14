@@ -9,9 +9,9 @@ class FindAllManagerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @dataProvider provider
+     * @dataProvider providerKeys
      */
-    public function test($expect, $key)
+    public function testFindByKey($expect, $key)
     {
         $manager = new FindAllManager($this->fixtures());
         $ipInfos = $manager->findAllByKey($key);
@@ -30,7 +30,29 @@ class FindAllManagerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function provider()
+    /**
+     * @dataProvider providerIps
+     */
+    public function testFindByIp($expect, $ip)
+    {
+        $manager = new FindAllManager($this->fixtures());
+        $ipInfos = $manager->findAllByIp($ip);
+
+        if (null === $expect) {
+            self::assertCount(0, $ipInfos);
+        } else {
+            if (!is_array($expect)) {
+                $expect = array($expect);
+            }
+            $asns = [];
+            foreach ($ipInfos as $ipInfo) {
+                $asns[] = $ipInfo->asn;
+            }
+            self::assertEquals($expect, $asns);
+        }
+    }
+
+    public function providerKeys()
     {
         return array(
             array(['1', '2'], '30.50'),
@@ -44,9 +66,23 @@ class FindAllManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function providerIps()
+    {
+        return array(
+            array(['1'], '30.50.50.130'),
+            array(null, '30.60.51.128'),
+            array(['2'], '30.50.10.244'),
+            array(null, '30.50.10.127'),
+            array(['3'], '170.100.10.0'),
+            array(null, '170.200.10.0'),
+            array(null, '66.25.60.51'),
+            array(['4'], '66.1.2.3'),
+            array(null, '88.88.55.66'),
+        );
+    }
+
     private function fixtures()
     {
-
         $ipInfo1 = new IpInfo();
         $ipInfo1->ip = $ip = '30.50.50.128';
         $ipInfo1->subnet = $ip.'/25';
