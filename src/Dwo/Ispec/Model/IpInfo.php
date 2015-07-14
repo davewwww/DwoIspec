@@ -12,8 +12,6 @@ class IpInfo
     public $ip;
     public $key;
     public $subnet;
-    public $ip_from;
-    public $ip_to;
     public $isp;
     public $asn;
     public $networkType;
@@ -44,8 +42,6 @@ class IpInfo
             'ip'          => $this->ip,
             'key'         => $this->key,
             'subnet'      => $this->subnet,
-            'ip_from'     => $this->ip_from,
-            'ip_to'       => $this->ip_to,
             'isp'         => $this->isp,
             'asn'         => $this->asn,
             'networkType' => $this->networkType,

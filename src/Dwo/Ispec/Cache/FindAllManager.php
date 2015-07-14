@@ -4,7 +4,6 @@ namespace Dwo\Ispec\Cache;
 
 use Dwo\Ispec\Exception\IspecException;
 use Dwo\Ispec\Helper\IpHelper;
-use Dwo\Ispec\Helper\IpRangeHelper;
 use Dwo\Ispec\Model\IpInfo;
 use Dwo\Ispec\Model\IpInfoFindAllManagerInterface;
 
@@ -23,10 +22,6 @@ class FindAllManager implements IpInfoFindAllManagerInterface
      * @var array
      */
     private $ipInfosGrouped = [];
-    /**
-     * @var IpInfo[]
-     */
-    private $ipInfosLong = [];
 
     /**
      * @param IpInfo[] $ipInfos
@@ -36,23 +31,6 @@ class FindAllManager implements IpInfoFindAllManagerInterface
         foreach ($ipInfos as $ipInfo) {
             $this->addSubnet($ipInfo);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findAllByIp($ip)
-    {
-        $ip = ip2long($ip);
-
-        $ipInfos = [];
-        foreach($this->ipInfosLong as $data) {
-            if($ip >= $data[0] && $ip <= $data[1]) {
-                $ipInfos[] = $data[2];
-            }
-        }
-
-        return $ipInfos;
     }
 
     /**
@@ -71,13 +49,14 @@ class FindAllManager implements IpInfoFindAllManagerInterface
         return array();
     }
 
+
     /**
      * @param IpInfo $ipInfo
      */
     private function addSubnet(IpInfo $ipInfo)
     {
         $subnet = $ipInfo->subnet;
-        if (empty($subnet)) {
+        if(empty($subnet)) {
             throw new IspecException('subnet is missing');
         }
 
@@ -90,8 +69,6 @@ class FindAllManager implements IpInfoFindAllManagerInterface
         }
 
         $this->ipInfosGrouped[$key][$subnet] = $ipInfo;
-
-        $range = IpRangeHelper::getIpRangeForSubnet($ipInfo->subnet);
-        $this->ipInfosLong[] = [ip2long($range[0]), ip2long($range[1]), $ipInfo];
     }
+
 }
